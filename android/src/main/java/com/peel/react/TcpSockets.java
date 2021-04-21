@@ -7,6 +7,7 @@ package com.peel.react;
 
 import android.support.annotation.Nullable;
 import android.util.Base64;
+import android.util.Log;
 
 import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Arguments;
@@ -110,12 +111,43 @@ public final class TcpSockets extends ReactContextBaseJavaModule implements TcpS
         }.execute();
     }
 
+    private byte charToByte(char c) {
+        return (byte)"0123456789ABCDEF".indexOf(c);
+    }
+
+    private  boolean isEmpty(CharSequence s) {
+        return s == null || s.length() == 0;
+    }
+
+    private  byte[] hexStringToBytes(String hexString) {
+        if(isEmpty(hexString)) {
+            return null;
+        }
+        hexString = hexString.toUpperCase();
+        int length = hexString.length() / 2;
+        char[] hexChars = hexString.toCharArray();
+        byte[] d = new byte[length];
+        for (int i = 0; i < length; i++) {
+            int pos = i * 2;
+            d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));
+        }
+        return d;
+    }
+
     @ReactMethod
-    public void write(final Integer cId, final String base64String, final Callback callback) {
+    public void write(final Integer cId, final String base64String,final boolean hex, final Callback callback) {
         new GuardedAsyncTask<Void, Void>(getReactApplicationContext()) {
             @Override
             protected void doInBackgroundGuarded(Void... params) {
-                socketManager.write(cId, Base64.decode(base64String, Base64.NO_WRAP));
+                Log.d(TAG, "base64String : " + base64String + " hex : " + hex);
+                if(hex){
+                    final String decodeString = new String(Base64.decode(base64String, Base64.NO_WRAP));
+                    //Log.d("TcpSockets", "base64String : " + base64String + " decodeString : " + decodeString);
+                    socketManager.write(cId, hexStringToBytes(decodeString));
+                }else{
+                    socketManager.write(cId, Base64.decode(base64String, Base64.NO_WRAP));
+                }
+
                 if (callback != null) {
                     callback.invoke();
                 }

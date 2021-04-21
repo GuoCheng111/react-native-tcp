@@ -253,7 +253,7 @@ TcpSocket.prototype._onError = function(error: string): void {
   this.destroy();
 };
 
-TcpSocket.prototype.write = function(buffer: any, callback: ?(err: ?Error) => void) : boolean {
+TcpSocket.prototype.write = function(buffer: any, callback: ?(err: ?Error) => void, hex :boolean) : boolean {
   var self = this;
 
   if (this._state === STATE.DISCONNECTED) {
@@ -275,7 +275,8 @@ TcpSocket.prototype.write = function(buffer: any, callback: ?(err: ?Error) => vo
     throw new Error('invalid message format');
   }
 
-  Sockets.write(this._id, str, function(err) {
+  //self._debug('socket.WRITE(): hex = ', hex);
+  Sockets.write(this._id, str, hex?true:false, function(err) {
     if (self._timeout) {
       clearTimeout(self._timeout);
       self._timeout = null;
