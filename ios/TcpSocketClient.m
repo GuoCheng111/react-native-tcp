@@ -6,7 +6,7 @@
 #import <netinet/in.h>
 #import <arpa/inet.h>
 #import "TcpSocketClient.h"
-#import "RCTBridgeModule.h"
+
 #import "GCDAsyncSocket.h"
 
 NSString *const RCTTCPErrorDomain = @"RCTTCPErrorDomain";

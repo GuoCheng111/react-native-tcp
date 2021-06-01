@@ -2,9 +2,11 @@
  * Copyright (c) 2015-present, Peel Technologies, Inc.
  * All rights reserved.
  */
+#ifndef TcpSocketClient_h
+#define TcpSocketClient_h
+#import <React/RCTBridgeModule.h>
 
 #import <Foundation/Foundation.h>
-#import "RCTBridgeModule.h"
 
 extern NSString *const RCTTCPErrorDomain;
 
@@ -100,3 +102,5 @@ typedef enum RCTTCPError RCTTCPError;
 
 
 @end
+
+#endif

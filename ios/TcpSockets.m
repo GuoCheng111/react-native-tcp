@@ -3,11 +3,7 @@
  * All rights reserved.
  */
 
-#import "RCTAssert.h"
-#import "RCTBridge.h"
-#import "RCTConvert.h"
-#import "RCTEventDispatcher.h"
-#import "RCTLog.h"
+
 #import "TcpSockets.h"
 #import "TcpSocketClient.h"
 
@@ -72,6 +68,7 @@ RCT_EXPORT_METHOD(connect:(nonnull NSNumber*)cId
 
 RCT_EXPORT_METHOD(write:(nonnull NSNumber*)cId
                   string:(NSString *)base64String
+                  string:(BOOL)hex
                   callback:(RCTResponseSenderBlock)callback) {
     TcpSocketClient* client = [self findClient:cId];
     if (!client) return;
